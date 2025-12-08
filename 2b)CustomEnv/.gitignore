@@ -1,0 +1,113 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+
+# Model checkpoints and data
+highway_dqn/
+checkpoints/
+data/
+*.pkl
+*.h5
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.pb
+# Model files (zip files from stable-baselines3)
+# Note: models/ directory is already ignored above
+*.zip
+!*.zip.example
+
+# Output directories (keep .gitkeep files)
+plots/
+# But keep .gitkeep files in these directories
+!plots/.gitkeep
+!results/.gitkeep
+!models/.gitkeep
+!logs/.gitkeep
+
+# TensorBoard
+runs/
+tensorboard/
+*.tfevents.*
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# RL/ML specific
+wandb/
+mlruns/
+.neptune/
+*.csv
+# Ignore JSON files except config files
+*.json
+!config/env_config.json
+!package.json
+!tsconfig.json
+
+# Stable-baselines3
+# Model files are handled above in "Model checkpoints and data" section
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Python type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Profiling data
+.prof

@@ -1,0 +1,238 @@
+{
+  "environment": {
+    "name": "ConstructionZoneEnv",
+    "version": "1.0.0",
+    "description": "Custom highway environment with construction zone"
+  },
+  
+  "action_space": {
+    "type": "continuous",
+    "dimensions": 2,
+    "description": "[acceleration, steering]",
+    
+    "acceleration": {
+      "min": -1.0,
+      "max": 1.0,
+      "description": "Negative values = brake, positive values = throttle"
+    },
+    
+    "steering": {
+      "min": -1.0,
+      "max": 1.0,
+      "description": "Negative = transition left, positive = transition right, 0.0 = stay in lane"
+    },
+    
+    "brake": {
+      "min": -1.0,
+      "max": 0.0,
+      "description": "Applied when acceleration < 0"
+    },
+    
+    "lane_change": {
+      "transition_speed": {
+        "min": 0.0,
+        "max": 1.0,
+        "description": "Values closer to ±1.0 result in faster lane transitions"
+      },
+      "maintain_lane_threshold": 0.0,
+      "description": "Continuous transitions rather than discrete jumps"
+    }
+  },
+  
+  "episode": {
+    "duration": {
+      "min_seconds": 20,
+      "max_seconds": 40,
+      "min_steps": 300,
+      "max_steps": 600
+    },
+    "success_threshold": {
+      "n_size": 100,
+      "description": "Episode successfully completes when N sized threshold is reached"
+    },
+    "max_steps": 1000,
+    "description": "Maximum steps before episode truncation"
+  },
+  
+  "speed": {
+    "construction_zone_limit_mph": 45,
+    "construction_zone_limit_kmh": 72.42,
+    "speed_tolerance_mph": 5,
+    "speed_tolerance_kmh": 8.05,
+    "description": "Must maintain speed within ±5 mph of construction zone limit"
+  },
+  
+  "reward": {
+    "collision_penalty": -1.0,
+    "closed_lane_penalty": -1.0,
+    "progress_reward": {
+      "type": "percentage",
+      "description": "Distance covered as percentage (e.g., 0.73 if 73% covered)"
+    },
+    "speed_compliance": {
+      "within_limit": 0.05,
+      "per_step": true,
+      "description": "Reward per step when driving within speed limit"
+    },
+    "speed_violation": {
+      "beyond_limit": -0.05,
+      "per_step": true,
+      "description": "Penalty per step when speeding beyond limit"
+    }
+  },
+  
+  "safety_rules": {
+    "collision": {
+      "enabled": true,
+      "terminates_episode": true,
+      "penalty": -1.0,
+      "description": "Collision with vehicles, barriers, or cones"
+    },
+    "closed_lane": {
+      "enabled": true,
+      "terminates_episode": true,
+      "penalty": -1.0,
+      "description": "Entering a closed lane is forbidden"
+    },
+    "following_distance": {
+      "time_to_collision_min": 1.2,
+      "unit": "seconds",
+      "description": "Maintain safe following distance (time-to-collision > 1.2s)"
+    },
+    "speed_limit": {
+      "enforced": true,
+      "tolerance": 5,
+      "unit": "mph",
+      "description": "Stay within work-zone speed limit"
+    },
+    "off_road": {
+      "enabled": true,
+      "terminates_episode": true,
+      "description": "No off-road driving allowed"
+    }
+  },
+  
+  "randomization": {
+    "lanes": {
+      "min_count": 2,
+      "max_count": 5,
+      "default": 3
+    },
+    "closed_lane": {
+      "side": ["left", "right"],
+      "random": true
+    },
+    "barrier_pattern": {
+      "type": "solid",
+      "options": ["solid", "zipper", "mixed"],
+      "current": "solid"
+    },
+    "traffic_density": {
+      "levels": ["low", "medium", "high"],
+      "current": "medium",
+      "description": "Traffic density in unaffected lanes"
+    },
+    "worker_carts": {
+      "min_count": 0,
+      "max_count": 3,
+      "default": 1
+    },
+    "worker_speed": {
+      "min_kmh": 5,
+      "max_kmh": 15,
+      "min_mph": 3.11,
+      "max_mph": 9.32,
+      "unit": "km/h"
+    }
+  },
+  
+  "environment_setup": {
+    "world": {
+      "type": "multi_lane_highway",
+      "construction_zone": true,
+      "obstacles": ["cones", "barriers", "worker_carts"],
+      "traffic": true
+    },
+    "agent": {
+      "type": "self_driving_car",
+      "control": "continuous",
+      "action_space": "2D vector [acceleration, steering]"
+    }
+  },
+  
+  "terminal_states": {
+    "success": {
+      "conditions": [
+        "Successfully completes N sized threshold episode",
+        "No collisions",
+        "No rule violations"
+      ]
+    },
+    "failure": {
+      "conditions": [
+        "Collision with vehicle or barrier",
+        "Entering closed lane",
+        "Not finishing within episode duration"
+      ]
+    }
+  },
+  
+  "constraints": {
+    "collision_avoidance": {
+      "enabled": true,
+      "strict": true,
+      "description": "Avoid all collisions with vehicles, barriers, or cones"
+    },
+    "lane_restriction": {
+      "enabled": true,
+      "allowed": "open_valid_lanes_only",
+      "description": "Stay only in open, valid lanes"
+    },
+    "speed_restriction": {
+      "enabled": true,
+      "tolerance_mph": 5,
+      "description": "Must maintain speed within ±5 mph of construction zone limit"
+    },
+    "road_boundary": {
+      "enabled": true,
+      "description": "No off-road driving"
+    }
+  },
+  
+  "training": {
+    "curriculum": {
+      "stage_1": {
+        "name": "Static cones only",
+        "obstacles": ["cones"],
+        "worker_carts": false,
+        "traffic": false
+      },
+      "stage_2": {
+        "name": "Add moving worker carts",
+        "obstacles": ["cones", "barriers"],
+        "worker_carts": true,
+        "traffic": false
+      },
+      "stage_3": {
+        "name": "Add dense traffic and fog",
+        "obstacles": ["cones", "barriers"],
+        "worker_carts": true,
+        "traffic": true,
+        "weather": "fog"
+      }
+    },
+    "evaluation_metrics": [
+      "success_rate",
+      "collision_count_per_100_episodes",
+      "mean_episodic_return",
+      "lane_violation_rate",
+      "jerk_smoothness"
+    ]
+  },
+  
+  "observation": {
+    "type": "continuous",
+    "description": "State observation from environment"
+  }
+}
+
