@@ -22,5 +22,3 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# TensorBoard
-events.out.tfevents.*
