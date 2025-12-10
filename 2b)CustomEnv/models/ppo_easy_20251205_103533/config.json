@@ -1,0 +1,31 @@
+{
+  "algorithm": "ppo",
+  "difficulty": "easy",
+  "total_timesteps": 2000,
+  "n_envs": 2,
+  "seed": 0,
+  "env_config": {
+    "duration": 40,
+    "simulation_frequency": 15,
+    "policy_frequency": 1,
+    "obstacles_count": 5,
+    "obstacle_spacing": 30,
+    "vehicles_count": 10,
+    "construction_zones_count": 1,
+    "construction_zone_length": 100,
+    "construction_zone_side": "left",
+    "construction_zone_lanes": 1,
+    "construction_cone_spacing": 8,
+    "reward": {
+      "collision_penalty": -1.0,
+      "closed_lane_penalty": -1.0,
+      "speed_compliance": {
+        "within_limit": 0.05
+      },
+      "speed_violation": {
+        "beyond_limit": -0.05
+      }
+    }
+  },
+  "hyperparams": {}
+}

@@ -1,0 +1,19 @@
+{
+  "num_episodes": 500,
+  "mean_reward": 1.0608499999999972,
+  "std_reward": 49.645365730624846,
+  "min_reward": -51.775,
+  "max_reward": 49.9,
+  "median_reward": 49.074999999999996,
+  "mean_length": 26.504,
+  "std_length": 14.724604714558554,
+  "collision_rate": 0.484,
+  "success_rate": 0.516,
+  "num_collisions": 242,
+  "num_successes": 258,
+  "mean_speed": 20.399698146863845,
+  "std_speed": 1.8953047060075385,
+  "max_speed": 25.0,
+  "total_lane_changes": 398,
+  "total_zone_violations": 0
+}

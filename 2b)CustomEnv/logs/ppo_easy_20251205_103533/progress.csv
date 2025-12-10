@@ -1,0 +1,2 @@
+rollout/ep_len_mean,time/total_timesteps,metrics/success_rate,metrics/collision_rate,rollout/ep_rew_mean,time/time_elapsed,time/iterations,metrics/episodes,time/fps
+18.81,4096,0.15,0.85,-33.86081495,138,1,100,29
