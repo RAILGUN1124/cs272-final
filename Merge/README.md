@@ -1,4 +1,4 @@
-# merge Environment Deep Reinforcement Learning
+# Merge Environment Deep Reinforcement Learning
 
 This project trains and evaluates PPO agents on the merge-v0 environment using two different observation types: **Grayscale** and **LiDAR**.
 
@@ -23,7 +23,7 @@ python train_merge_lidar.py
 ```
 
 Both training scripts will:
-- Train for 100,000 timesteps
+- Train for 500,000 timesteps
 - Save models to `models/` directory
 - Log training data to `training_data/` directory
 - Generate TensorBoard logs in `logs/` directory
